@@ -1,0 +1,35 @@
+{
+  "summary": "Frontend-only pass on the offline Ledger app (public preview URL, 390x844 viewport). PRIMARY BUG VERIFIED FIXED: dashboard category-filter-dropdown now opens an opaque Modal menu fully ABOVE the 'No spends yet' card (bg rgb(255,255,255), opacity 1, elementFromPoint returns category-option-all as topmost), all 8 options (All categories + 7 defaults) visible and tappable, selecting Food updates trigger label, backdrop tap dismisses. Add payment flow PASS (sheet dropdown has no 'All categories', save updates total/breakdown/recent spends). Transfer-on-delete PASS (transfer box appears, dropdown excludes 'All categories' and deleted category, 'Move & delete' reassigns spends, verified on dashboard). Regressions PASS: quick-action rows tappable, edit payment, PDF preview total renders, strict date validation rejects 31/02/2026 (error shown, nothing persisted). UNABLE TO VERIFY on web: delete-payment + Undo snackbar — Alert.alert is a no-op in RN-web (no dialog/DOM renders), so the delete confirm never appears on the preview; expected to work on Android/Expo Go.",
+  "backend_issues": {"critical": [], "minor": []},
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [
+      {"flow": "Delete payment -> Undo snackbar", "issue": "Alert.alert does not render on the web preview (react-native-web platform limitation), so delete confirmation and the subsequent Undo flow cannot be exercised in preview. Not a code bug — works on native — but means this flow has zero web-preview coverage.", "affected_testIDs": []}
+    ],
+    "design_issues": [],
+    "react_native_issues": [
+      {"component": "Styles (fab, dropdownMenu)", "issue": "Console warning: '\"shadow*\" style props are deprecated. Use \"boxShadow\".' on web preview from shadowColor/shadowOpacity/shadowRadius in styles. Reference: /app/frontend/app/index.tsx:203 (fab, dropdownMenu styles)."},
+      {"component": "useStyles / breakdownLine", "issue": "Six duplicated 'breakdownLine' keys in the style object suppressed via '/* eslint-disable no-dupe-keys */' and '@ts-ignore'. Harmless at runtime (last wins) but a maintenance smell; collapse to one key. Reference: /app/frontend/app/index.tsx:203."}
+    ]
+  },
+  "test_report_links": ["/app/test_reports/iteration_2.json"],
+  "action_items": [
+    "Optional: replace shadow* style props with boxShadow to silence the RN-web deprecation warning.",
+    "Optional: remove duplicated breakdownLine style keys and the eslint-disable/@ts-ignore workarounds.",
+    "Optional hardening: disable the Save button (disabled={!valid || saving}) in PaymentForm in addition to showing the inline error; current tap-on-invalid shows error correctly, so not required.",
+    "Verify delete-payment Alert + Undo snackbar on an Android/Expo Go build since web preview cannot render Alert.alert."
+  ],
+  "critical_code_review_comments": [
+    "CategoryDropdown Modal fix is correctly implemented: measureInWindow anchor, transparent full-screen Modal, opens upward near screen bottom, maxHeight 280 scrollable, backdrop dismiss — all verified working.",
+    "includeAll={false} correctly applied to both the payment form and transfer dropdowns; verified neither shows 'All categories' and transfer dropdown also excludes the category being deleted.",
+    "dateValue strict validation (parsed date must match entered Y/M/D) confirmed working — 31/02/2026 rejected.",
+    "PaymentForm save button is only disabled while saving, not when invalid; tapping with invalid data shows 'Enter an amount, category, and valid date.' and persists nothing — meets the stated requirement."
+  ],
+  "updated_files": ["/app/test_reports/iteration_2.json"],
+  "success_rate": {"backend": "N/A", "frontend": "95%"},
+  "seed_data_creation": "Temporary localStorage seed payments (TEST metro card, TEST lunch, TEST del) created for testing and fully cleared afterwards; preview left in clean empty state.",
+  "retest_needed": false,
+  "should_main_agent_self_test": true,
+  "context_for_next_testing_agent": "All requested flows pass on the web preview. The dropdown-under-card bug is fixed and independently verified. Only gap: delete+undo cannot be tested on web because Alert.alert is a no-op in react-native-web; if regression coverage is needed, test on a native build or replace Alert with an in-app confirm modal.",
+  "rca_of_issue": "Original bug: inline absolute-positioned dropdown menu rendered inside a ScrollView/card stacking context, so the empty-state card painted above it and intercepted touches. Fix verified: menu now renders in a transparent full-screen RN Modal (topmost native layer) anchored via measureInWindow, with opaque surfaceSecondary background — confirmed topmost via elementFromPoint returning category-option-all."
+}

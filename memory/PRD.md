@@ -32,6 +32,7 @@ Build an Android-first offline ledger app for Subhasish to track spending, revie
 - 2026-09-25: Added date-range PDF generation/sharing with summary, category breakdown, itemized payments, and footer.
 - 2026-09-25: Added small-screen bottom-sheet positioning, strict calendar validation, themed modal backdrop, and Android-friendly touch targets.
 - 2026-09-25: Verified lint, TypeScript, dashboard rendering, add/edit/filter flow, PDF sheet, small-screen quick actions, and invalid-date handling.
+- 2026-09-25: Fixed the category dropdown menu rendering beneath the empty-state card by moving it into an anchored full-screen modal (opaque, backdrop dismiss, opens upward near the screen bottom); payment and transfer pickers no longer offer an invalid "All categories" option.
 
 ## Prioritized backlog
 - **P0:** None for the requested offline MVP.
