@@ -1,0 +1,131 @@
+{
+  "app_name": "Ledger - Spend Tracker",
+  "personality": "1 iOS-Native Clean",
+  "personality_one_liner": "Calm, trustworthy, and distraction-free offline expense ledger with tactile precision and instant glanceability.",
+  "color": {
+    "surface": "#F8F9FA",
+    "onSurface": "#1A1D20",
+    "surfaceSecondary": "#FFFFFF",
+    "onSurfaceSecondary": "#1A1D20",
+    "surfaceTertiary": "#F1F3F5",
+    "onSurfaceTertiary": "#495057",
+    "surfaceInverse": "#212529",
+    "onSurfaceInverse": "#F8F9FA",
+    "brand": "#2B303A",
+    "brandPrimary": "#2B303A",
+    "onBrandPrimary": "#FFFFFF",
+    "brandSecondary": "#495057",
+    "onBrandSecondary": "#FFFFFF",
+    "brandTertiary": "#E9ECEF",
+    "onBrandTertiary": "#2B303A",
+    "success": "#2B8A3E",
+    "onSuccess": "#FFFFFF",
+    "warning": "#E67700",
+    "onWarning": "#FFFFFF",
+    "error": "#C92A2A",
+    "onError": "#FFFFFF",
+    "info": "#1864AB",
+    "onInfo": "#FFFFFF",
+    "border": "#DEE2E6",
+    "borderStrong": "#CED4DA",
+    "divider": "#E9ECEF",
+    "muted": "#6C757D",
+    "onBrand": "#FFFFFF"
+  },
+  "typography": {
+    "displayFontFamily": "System",
+    "textFontFamily": "System",
+    "scale": {
+      "sm": 12,
+      "base": 14,
+      "lg": 16,
+      "xl": 20,
+      "2xl": 24
+    }
+  },
+  "spacing": {
+    "rule": "Generous iOS vertical rhythm, safe-area conscious, touch targets >= 44x44pt",
+    "xs": 4,
+    "sm": 8,
+    "md": 12,
+    "lg": 16,
+    "xl": 24,
+    "2xl": 32,
+    "3xl": 48
+  },
+  "radius_tokens": {
+    "sm": 6,
+    "md": 12,
+    "lg": 20,
+    "pill": 999
+  },
+  "shadow_tier": "1",
+  "navigation": "stack_only",
+  "icon_set": "Ionicons",
+  "glassmorphism": {
+    "enabled": false,
+    "do's": [],
+    "dont's": []
+  },
+  "platform_libraries": {
+    "glass": {
+      "ios": "expo-glass-effect",
+      "android": "expo-blur",
+      "low_end_android_fallback": "solid surfaceSecondary"
+    },
+    "image": "expo-image",
+    "blur": "expo-blur",
+    "bottom_sheet": "@gorhom/bottom-sheet",
+    "animation": "react-native-reanimated",
+    "gesture": "react-native-gesture-handler"
+  },
+  "screens": [
+    {
+      "name": "Dashboard",
+      "purpose": "Overview of total spent filtered by month/week, category spend breakdown with dropdown filters, transaction list, and quick actions.",
+      "states": {
+        "loading": "Centered spinner over surface",
+        "empty": "Clean minimal empty state with 'No spends yet' prompt and quick add CTA",
+        "error": "Error message with retry action"
+      },
+      "layout": "Sticky header with app title and PDF export button. Total spend card with week/month segmented toggle. Category breakdown card with dropdown filter and progress bars. Transaction history list with date grouping, amount in ₹, category badge, and notes. Sticky Floating Action Button (FAB) at bottom right with 3-option action sheet (Add Payment, Add Category, Download PDF)."
+    },
+    {
+      "name": "AddPaymentModal",
+      "purpose": "Modal sheet to add a new spend amount, choose category, select date (DD/MM/YYYY), and add optional note.",
+      "states": {
+        "loading": "Active input focus",
+        "empty": "Amount input placeholder ₹0",
+        "error": "Validation error for missing amount or category"
+      },
+      "layout": "Bottom sheet or full-screen modal with clean form fields, large numeric amount keypad input, category selector chips/dropdown, date picker, and note input. Sticky primary CTA 'Save Spend'."
+    },
+    {
+      "name": "CategoryManagerModal",
+      "purpose": "Manage categories: add new, edit name/color, or delete with spend transfer destination prompt.",
+      "states": {
+        "loading": "List skeleton",
+        "empty": "No custom categories",
+        "error": "Deletion error if last category"
+      },
+      "layout": "List of default and custom categories with action buttons for edit and delete. Transfer modal when deleting a category that has active spends."
+    },
+    {
+      "name": "PDFExportModal",
+      "purpose": "Export spend data to PDF with custom date range selection, summary totals, and itemized lists.",
+      "states": {
+        "loading": "Generating PDF...",
+        "empty": "No data in selected date range",
+        "error": "Export failed message"
+      },
+      "layout": "Date range picker (from date to date), summary preview card, and 'Generate & Share PDF' primary action button."
+    }
+  ],
+  "images": {
+    "wallet_hero": {
+      "url": "https://images.unsplash.com/photo-1689844833510-10939e60e8dc",
+      "alt": "Minimalist wallet and finance visual"
+    }
+  },
+  "instructions_to_main_agent": "Implement a fully functional offline React Native Ledger app for Android using local AsyncStorage. Strictly follow currency ₹, date format DD/MM/YYYY, categories (Food, Transport, Bills, Shopping, Health, Entertainment, Other), PDF export via expo-print / expo-sharing, category deletion with spend transfer prompt, undo deletion snackbar, edit payments, and include 'Made by Subhasish' in the footer. Ensure all UI components adhere to iOS-Native Clean personality with 44x44pt touch targets and correct light surface contrast."
+}
